@@ -1,0 +1,70 @@
+All the exercises use one theme, a Library system (books, members, loans), so each step builds on the last and ends as a Spring Boot app. Set up JDK 21 and IntelliJ IDEA Community first, and type the code yourself instead of copying it.
+
+1. Classes + objects
+Create a Book class with fields title, author, year, and a method describe() that prints them.
+In main, create 3 Book objects and call describe() on each.
+Create a Member class (name, email) and print two members.
+2. public/private/protected + packages
+Put your classes in packages: com.library.model (Book, Member) and com.library.app (Main).
+Make all fields private, then add getters and setters. Try accessing book.title from Main and read the compiler error.
+Add a setter for year that rejects values below 0.
+3. Constructors + this
+Add a constructor Book(String title, String author, int year) that uses this.
+Add a second constructor Book(String title, String author) that calls the first one with this(...) and a default year.
+Override toString() so System.out.println(book) prints nicely.
+4. static + final
+Add private static int count to Book and increment it in the constructor. Add static int getCount().
+Create a LibraryConfig class with public static final int MAX_LOANS = 3.
+Make the title field final, then see what breaks and why.
+5. Inheritance + overriding
+Create Ebook extends Book with an extra field fileSizeMb.
+Call super(...) in its constructor and override describe() to add the file size.
+Create a Book[] array holding both Book and Ebook objects and loop over it. Notice which describe() runs (polymorphism).
+6. Abstract classes
+Create abstract class Item with title and an abstract method double getLateFee(int days).
+Make Book and Dvd extend Item, each with a different fee rule.
+Try new Item() and read the error.
+7. Interfaces
+Create the interface Borrowable with borrow(), giveBack() and isAvailable().
+Make Book implement it and keep an available flag.
+Create a Printable interface with a default method, and implement both interfaces in one class.
+8. Exceptions
+Create a custom exception BookNotAvailableException extends Exception.
+Make borrow() throw it when the book is already borrowed, and handle it with try/catch in main.
+Write a method that parses a String to an int and catches NumberFormatException.
+Use try/finally to print "Done" whatever happens.
+9. ArrayList, HashMap, HashSet
+Store 5 books in an ArrayList<Book>, then add, remove and loop over them.
+Use a HashMap<String, Book> keyed by ISBN to look up a book. Try an ISBN that doesn't exist.
+Add duplicate titles to a HashSet<String> and see what happens.
+Build a LibraryService class that holds the list and has addBook, findByAuthor and removeBook.
+10. Generics
+Write a generic class Box<T> with set(T) and get(). Test it with String and Book.
+Write a generic method static <T> T firstOf(List<T> list).
+Write a generic interface Repository<T, ID> with save, findById and findAll, then implement BookRepository using a HashMap. Spring Data uses this same pattern.
+11. Lambdas
+Sort your books by year using list.sort((a, b) -> ...).
+Use list.forEach(b -> System.out.println(b.getTitle())), then rewrite it with a method reference (System.out::println).
+Use removeIf to delete all books older than 1990.
+Write your own functional interface Validator<T> with boolean validate(T t) and pass a lambda to it.
+12. Streams
+filter: get all books by one author.
+map: get a List<String> of titles in uppercase.
+reduce: compute the sum of all page counts (add a pages field).
+Combine them: titles of books published after 2000, sorted, joined into one string with Collectors.joining(", ").
+groupingBy: group books by author into a Map<String, List<Book>>.
+13. Maven
+Create a Maven project (mvn archetype:generate or IntelliJ's "New Project → Maven").
+Move your code into src/main/java and read the pom.xml: groupId, artifactId, version, dependencies.
+Add a dependency (JUnit 5), write a test for LibraryService.findByAuthor in src/test/java, and run it with mvn test.
+Run mvn clean package and find the .jar in target/.
+14. Spring Boot
+
+Generate a project at start.spring.io (Maven, Java 21, dependencies: Spring Web, Spring Data JPA, H2 Database).
+
+Hello endpoint: create a @RestController with GET /hello that returns text.
+Books API (in memory): GET /books, GET /books/{id}, POST /books, DELETE /books/{id}, backed by a plain List<Book>. Test with Postman or curl.
+Layers: split the code into BookController → BookService (@Service) → BookRepository, and inject them through constructors. This is dependency injection, the core Spring idea.
+Database: turn Book into a @Entity, make BookRepository extends JpaRepository<Book, Long>, and run it against H2. Add a custom method findByAuthor(String author).
+Errors: throw your custom exception when a book isn't found and return a 404 using @ControllerAdvice or @ResponseStatus.
+Validation: add @NotBlank on the title and @Valid on the request body.
